@@ -1,91 +1,150 @@
-# DaliCount 0.8.1-beta
+<p align="center">
+  <img src="assets/dalicount-icon.png" alt="Icône DaliCount" width="128">
+</p>
 
-DaliCount est un compteur de combat léger pour **World of Warcraft: Forever 1.60.1**, développé par **Daliranas**.
+<h1 align="center">DaliCount</h1>
 
-## Fonctions
+<p align="center">
+  <strong>Un compteur de combat léger, compact et moderne pour World of Warcraft: Forever.</strong>
+</p>
 
-- Degats totaux
-- DPS
-- Soins totaux
-- HPS
-- Absorptions
-- Degats subis
-- Degats evitables
-- Interruptions
-- Dissipations
-- Morts
-- Vue Combat courant / Session globale
-- Details par sort apres le combat
-- Détails compacts ajustés automatiquement au nombre de sorts
-- Partage du classement vers Groupe, Dire ou Raid (hors combat)
-- Interface sombre inspirée de WoW, avec bordures dorées et couleurs de classe
-- Icône de spécialisation et repère du joueur local
-- Fenêtre déplaçable, redimensionnable par échelle et verrouillable
-- Redimensionnement direct avec la poignée en bas à droite
-- Fond semi-transparent avec opacité réglable
-- 5 a 15 lignes affichables
-- Hauteur automatique selon le nombre de participants (désactivable)
-- Aucun framework externe (Ace3, LibStub, etc.)
+<p align="center">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.8.1--beta-f2b333">
+  <img alt="WoW Forever" src="https://img.shields.io/badge/WoW%20Forever-1.60.1-6b8afd">
+  <img alt="Dépendances" src="https://img.shields.io/badge/dependances-aucune-55aa77">
+  <img alt="Développeur" src="https://img.shields.io/badge/developpeur-Daliranas-dc7ba8">
+</p>
 
-## Important : API WoW Forever
+DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` de WoW Forever et ne nécessite aucun framework externe.
 
-WoW Forever utilise l'API moderne `C_DamageMeter`. Les anciennes methodes de Recount/Details basees sur `COMBAT_LOG_EVENT_UNFILTERED` ne sont pas la bonne approche ici.
+Version actuelle : **0.8.1-beta**.
 
-Pendant le combat, plusieurs valeurs de `C_DamageMeter` sont des **secret values**. DaliCount ne fait ni calcul, ni tri Lua, ni comparaison sur ces valeurs. Il conserve l'ordre fourni par Blizzard et envoie directement les valeurs aux widgets natifs (barres et textes). Les détails par sort sont ouverts hors combat. Les éléments décoratifs utilisent uniquement des textures fournies par le client WoW.
+## Aperçu
+
+<p align="center">
+  <img src="assets/screenshots/dalicount-damage.png" alt="DaliCount — dégâts et détail des sorts" width="49%">
+  <img src="assets/screenshots/dalicount-healing.png" alt="DaliCount — soins et détail des sorts" width="49%">
+</p>
+
+## Points forts
+
+- Dégâts, DPS, soins, HPS et absorptions.
+- Dégâts subis et évitables.
+- Interruptions, dissipations et morts.
+- Combat actuel ou session globale.
+- Détail par sort disponible hors combat.
+- Barres aux couleurs de classe et icônes de spécialisation.
+- Hauteur automatique selon le nombre de participants.
+- Largeur, échelle et transparence configurables.
+- Fenêtre déplaçable et verrouillable.
+- Partage du classement vers Groupe, Dire ou Raid.
+- Aucune dépendance : ni Ace3, ni LibStub.
 
 ## Installation
 
-1. Fermer WoW.
-2. Copier le dossier `DaliCount` dans :
-   `World of Warcraft/_classic_beta_/Interface/AddOns/`
-3. Verifier que le chemin final est :
-   `.../Interface/AddOns/DaliCount/DaliCount.toc`
-4. Relancer WoW puis activer DaliCount dans la liste des addons.
-5. Taper `/dc` pour afficher/masquer la fenetre.
+1. Téléchargez ou clonez ce dépôt.
+2. Fermez World of Warcraft.
+3. Copiez le dossier `DaliCount` dans :
+
+   ```text
+   World of Warcraft/_classic_beta_/Interface/AddOns/
+   ```
+
+4. Vérifiez que le fichier suivant existe :
+
+   ```text
+   .../Interface/AddOns/DaliCount/DaliCount.toc
+   ```
+
+5. Relancez WoW et activez **DaliCount** dans la liste des addons.
+
+Utilisez `/dc` pour afficher ou masquer la fenêtre.
+
+## Utilisation
+
+| Action | Résultat |
+|---|---|
+| Clic gauche sur la statistique | Mode suivant |
+| Clic droit sur la statistique | Mode précédent |
+| Clic sur `Combat` ou `Session` | Change la période affichée |
+| Clic sur une ligne | Ouvre le détail par sort hors combat |
+| Bouton `P` | Ouvre le menu de partage |
+| Bouton `R` | Réinitialise les données de combat |
+| Poignée inférieure droite | Modifie la largeur |
 
 ## Commandes
 
-- `/dc` : afficher/masquer
-- `/dc mode` : mode suivant
-- `/dc mode dps`
-- `/dc mode damage`
-- `/dc mode healing`
-- `/dc mode hps`
-- `/dc mode absorbs`
-- `/dc mode interrupts`
-- `/dc mode dispels`
-- `/dc mode taken`
-- `/dc mode avoidable`
-- `/dc mode deaths`
-- `/dc combat` : combat courant
-- `/dc session` : session globale
-- `/dc reset` : reset du meter
-- `/dc lock` / `/dc unlock`
-- `/dc rows 1-15`
-- `/dc auto on|off` : activer ou désactiver la hauteur automatique
-- `/dc scale 75-150` : taille de l'interface en pourcentage
-- `/dc opacity 10-100` : transparence du fond
-- `/dc report groupe 5` : partager les 5 premières lignes au groupe
-- `/dc report dire 5`
-- `/dc report raid 5`
+### Affichage
 
-Le canal Dire est protégé par WoW : DaliCount prépare le rapport dans la zone de discussion, puis le joueur confirme l'envoi avec Entrée.
-- `/dc position` : réinitialiser la position et l'échelle
-- `/dc version` : afficher la version et le développeur
-- `/dc help`
+| Commande | Description |
+|---|---|
+| `/dc` | Afficher ou masquer DaliCount |
+| `/dc show` | Afficher la fenêtre |
+| `/dc hide` | Masquer la fenêtre |
+| `/dc lock` | Verrouiller la fenêtre |
+| `/dc unlock` | Déverrouiller la fenêtre |
+| `/dc position` | Réinitialiser la position, la largeur et l'échelle |
 
-## Note beta : SavedVariables
+### Apparence
 
-Les builds beta WoW Forever 1.60.1 ont eu un bug de chargement des `SavedVariables` lors d'un redemarrage complet du client. Si la position ou les reglages se reinitialisent, cela peut venir du client et non de DaliCount.
+| Commande | Description |
+|---|---|
+| `/dc rows 1-15` | Définir le nombre maximal de lignes |
+| `/dc auto on` | Adapter automatiquement la hauteur |
+| `/dc auto off` | Conserver un nombre fixe de lignes |
+| `/dc scale 75-150` | Modifier l'échelle en pourcentage |
+| `/dc opacity 10-100` | Modifier l'opacité du fond |
 
-## Etat
+### Données
 
-Cette version est une premiere beta technique. Le point le plus important est de tester sur un vrai combat Forever :
+| Commande | Description |
+|---|---|
+| `/dc combat` | Afficher le combat actuel |
+| `/dc session` | Afficher la session globale |
+| `/dc reset` | Effacer les sessions de combat |
+| `/dc mode` | Passer au mode suivant |
+| `/dc mode <nom>` | Sélectionner directement un mode |
 
-- rendu live des secret values ;
-- ordre DPS/HPS ;
-- detail par sort apres combat ;
-- reset ;
-- changement Combat / Session.
+Modes disponibles :
 
-Si le client remonte une erreur Lua, activer `/console scriptErrors 1`, reproduire le probleme et conserver le texte complet de l'erreur.
+```text
+damage, dps, healing, hps, absorbs,
+interrupts, dispels, taken, avoidable, deaths
+```
+
+### Partage
+
+```text
+/dc report groupe 5
+/dc report dire 5
+/dc report raid 5
+```
+
+Le nombre final sélectionne entre 1 et 10 entrées. Le canal **Dire** est protégé par WoW : DaliCount prépare le rapport dans la zone de discussion, puis vous confirmez son envoi avec `Entrée`. Groupe et Raid sont envoyés automatiquement hors combat.
+
+## Compatibilité WoW Forever
+
+WoW Forever expose les données via `C_DamageMeter`. Pendant le combat, certaines informations sont des **secret values** protégées par le client.
+
+DaliCount respecte ces restrictions :
+
+- aucun tri ou calcul Lua sur les valeurs protégées ;
+- conservation de l'ordre fourni par Blizzard ;
+- transmission directe des valeurs aux widgets natifs autorisés ;
+- détail des sorts et partage accessibles hors combat ;
+- aucune reconstruction via `COMBAT_LOG_EVENT_UNFILTERED`.
+
+## Dépannage
+
+Pour afficher les erreurs Lua :
+
+```text
+/console scriptErrors 1
+/reload
+```
+
+Si la position ou les réglages sont perdus après un redémarrage complet, cela peut provenir du chargement des `SavedVariables` sur certaines versions bêta de WoW Forever.
+
+## Auteur
+
+Développé par **Daliranas**.
