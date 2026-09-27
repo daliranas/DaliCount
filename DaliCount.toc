@@ -1,0 +1,12 @@
+## Interface: 16001
+## Title: |cff4aa3ffDali|rCount
+## Notes: Compteur de combat élégant et léger pour World of Warcraft: Forever.
+## Author: Daliranas
+## X-Developer: Daliranas
+## Version: 0.8.1-beta
+## SavedVariables: DaliCountDB
+
+Core.lua
+Data.lua
+Report.lua
+UI.lua
