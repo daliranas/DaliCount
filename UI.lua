@@ -177,9 +177,8 @@ function DC:CreateUI()
     accent:SetColorTexture(COLORS.gold[1], COLORS.gold[2], COLORS.gold[3], 0.55)
 
     local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    title:SetPoint("TOPLEFT", 7, -7)
-    title:SetText("DaliCount")
-    title:Hide()
+    title:SetPoint("TOPLEFT", 7, -8)
+    title:SetText("|cfff2b333Dali|r|cffe8e8e8Count|r")
     self.title = title
 
     local version = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
@@ -196,7 +195,7 @@ function DC:CreateUI()
     status:Hide()
 
     local metricButton = makeButton(frame, "Dégâts", 100)
-    metricButton:SetPoint("TOPLEFT", 5, -3)
+    metricButton:SetPoint("TOPLEFT", 78, -3)
     metricButton:SetScript("OnClick", function(_, button)
         DC:CycleMetric(button == "RightButton" and -1 or 1)
     end)
@@ -385,7 +384,7 @@ end
 
 function DC:LayoutWidth()
     if not self.frame or not self.metricButton or not self.sessionButton or not self.resetButton then return end
-    local innerWidth = math.max(138, self.frame:GetWidth() - 88)
+    local innerWidth = math.max(138, self.frame:GetWidth() - 161)
     local metricWidth = math.floor(innerWidth * 0.60)
     local sessionWidth = innerWidth - metricWidth
     self.metricButton:SetWidth(metricWidth)
