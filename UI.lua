@@ -1,21 +1,21 @@
 local _, DC = ...
 
-local FRAME_WIDTH = 380
-local HEADER_HEIGHT = 29
-local ROW_HEIGHT = 24
+local FRAME_WIDTH = 340
+local HEADER_HEIGHT = 26
+local ROW_HEIGHT = 21
 local ROW_GAP = 1
-local FOOTER_SPACE = 10
-local CONTENT_TOP = -29
-local BREAKDOWN_WIDTH = 380
+local FOOTER_SPACE = 6
+local CONTENT_TOP = -26
+local BREAKDOWN_WIDTH = 340
 local BREAKDOWN_HEADER = 56
 local BREAKDOWN_ROW_HEIGHT = 23
 
 local COLORS = {
-    panel = { 0.015, 0.018, 0.025, 0.30 },
+    panel = { 0.010, 0.012, 0.018, 0.16 },
     panelAlt = { 0.040, 0.047, 0.060, 0.90 },
     gold = { 0.95, 0.70, 0.20, 1.00 },
     goldDim = { 0.35, 0.29, 0.17, 0.90 },
-    border = { 0.12, 0.14, 0.18, 0.55 },
+    border = { 0.12, 0.14, 0.18, 0.12 },
 }
 
 local function makeBackdrop(frame, alpha)
@@ -142,7 +142,7 @@ function DC:CreateUI()
     shadow:SetTexture("Interface\\Buttons\\WHITE8X8")
     shadow:SetPoint("TOPLEFT", -4, 4)
     shadow:SetPoint("BOTTOMRIGHT", 4, -4)
-    shadow:SetColorTexture(0, 0, 0, 0.48)
+    shadow:SetColorTexture(0, 0, 0, 0.18)
 
     frame:SetScript("OnDragStart", function(f)
         if not DC.db or DC.db.locked then return end
@@ -165,8 +165,8 @@ function DC:CreateUI()
     header:SetTexture("Interface\\Buttons\\WHITE8X8")
     header:SetPoint("TOPLEFT", 1, -1)
     header:SetPoint("TOPRIGHT", -1, -1)
-    header:SetHeight(27)
-    header:SetColorTexture(0.025, 0.030, 0.040, 0.48)
+    header:SetHeight(24)
+    header:SetColorTexture(0.025, 0.030, 0.040, 0.34)
     self.headerTexture = header
 
     local accent = frame:CreateTexture(nil, "ARTWORK")
@@ -174,11 +174,12 @@ function DC:CreateUI()
     accent:SetPoint("TOPLEFT", 1, -1)
     accent:SetPoint("TOPRIGHT", -1, -1)
     accent:SetHeight(1)
-    accent:SetColorTexture(unpack(COLORS.gold))
+    accent:SetColorTexture(COLORS.gold[1], COLORS.gold[2], COLORS.gold[3], 0.55)
 
-    local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    title:SetPoint("TOPLEFT", 8, -7)
-    title:SetText("|cfff2b333Dali|r|cffe8e8e8Count|r")
+    local title = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    title:SetPoint("TOPLEFT", 7, -7)
+    title:SetText("DaliCount")
+    title:Hide()
     self.title = title
 
     local version = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
@@ -195,7 +196,7 @@ function DC:CreateUI()
     status:Hide()
 
     local metricButton = makeButton(frame, "Dégâts", 100)
-    metricButton:SetPoint("TOPLEFT", 82, -4)
+    metricButton:SetPoint("TOPLEFT", 5, -3)
     metricButton:SetScript("OnClick", function(_, button)
         DC:CycleMetric(button == "RightButton" and -1 or 1)
     end)
@@ -226,8 +227,22 @@ function DC:CreateUI()
     closeButton:SetScript("OnClick", function() DC:Hide() end)
     addTooltip(closeButton, "Masquer", "Utilisez /dc pour réafficher DaliCount.")
 
+    self.utilityButtons = { shareButton, resetButton, closeButton }
+    local function setUtilityAlpha(alpha)
+        for _, button in ipairs(DC.utilityButtons or {}) do button:SetAlpha(alpha) end
+        if DC.resizeGrip then DC.resizeGrip:SetAlpha(alpha) end
+    end
+    frame:HookScript("OnEnter", function() setUtilityAlpha(1) end)
+    frame:HookScript("OnLeave", function() setUtilityAlpha(0.22) end)
+    for _, button in ipairs(self.utilityButtons) do
+        button:HookScript("OnEnter", function() setUtilityAlpha(1) end)
+        button:HookScript("OnLeave", function() setUtilityAlpha(0.22) end)
+    end
+
     local resizeGrip = makeResizeGrip(frame)
     self.resizeGrip = resizeGrip
+    resizeGrip:SetAlpha(0.22)
+    setUtilityAlpha(0.22)
     resizeGrip:SetScript("OnMouseDown", function(_, button)
         if button ~= "LeftButton" or not DC.db or DC.db.locked then return end
         frame:StartSizing("RIGHT")
@@ -245,8 +260,8 @@ function DC:CreateUI()
     for i = 1, 15 do
         local row = CreateFrame("Button", nil, frame, "BackdropTemplate")
         row:SetHeight(ROW_HEIGHT)
-        row:SetPoint("TOPLEFT", 7, CONTENT_TOP - (i - 1) * (ROW_HEIGHT + ROW_GAP))
-        row:SetPoint("TOPRIGHT", -7, CONTENT_TOP - (i - 1) * (ROW_HEIGHT + ROW_GAP))
+        row:SetPoint("TOPLEFT", 2, CONTENT_TOP - (i - 1) * (ROW_HEIGHT + ROW_GAP))
+        row:SetPoint("TOPRIGHT", -2, CONTENT_TOP - (i - 1) * (ROW_HEIGHT + ROW_GAP))
         row:RegisterForClicks("LeftButtonUp")
         row:SetBackdrop({
             bgFile = "Interface\\Buttons\\WHITE8X8",
@@ -294,14 +309,14 @@ function DC:CreateUI()
         row.rank = rank
 
         local icon = overlay:CreateTexture(nil, "ARTWORK")
-        icon:SetSize(20, 20)
-        icon:SetPoint("LEFT", rank, "RIGHT", 6, 0)
+        icon:SetSize(17, 17)
+        icon:SetPoint("LEFT", rank, "RIGHT", 4, 0)
         icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
         icon:Hide()
         row.icon = icon
 
-        local name = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-        name:SetPoint("LEFT", icon, "RIGHT", 7, 0)
+        local name = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        name:SetPoint("LEFT", icon, "RIGHT", 5, 0)
         name:SetJustifyH("LEFT")
         name:SetWordWrap(false)
         name:SetShadowColor(0, 0, 0, 1)
@@ -316,7 +331,7 @@ function DC:CreateUI()
         localPlayer:Hide()
         row.localPlayer = localPlayer
 
-        local primary = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+        local primary = overlay:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         primary:SetPoint("RIGHT", -7, 0)
         primary:SetWidth(52)
         primary:SetJustifyH("RIGHT")
@@ -370,8 +385,8 @@ end
 
 function DC:LayoutWidth()
     if not self.frame or not self.metricButton or not self.sessionButton or not self.resetButton then return end
-    local innerWidth = math.max(138, self.frame:GetWidth() - 162)
-    local metricWidth = math.floor(innerWidth * 0.58)
+    local innerWidth = math.max(138, self.frame:GetWidth() - 88)
+    local metricWidth = math.floor(innerWidth * 0.60)
     local sessionWidth = innerWidth - metricWidth
     self.metricButton:SetWidth(metricWidth)
     self.sessionButton:SetWidth(sessionWidth)
@@ -457,7 +472,7 @@ function DC:CreateBreakdownUI()
     shadow:SetTexture("Interface\\Buttons\\WHITE8X8")
     shadow:SetPoint("TOPLEFT", -4, 4)
     shadow:SetPoint("BOTTOMRIGHT", 4, -4)
-    shadow:SetColorTexture(0, 0, 0, 0.48)
+    shadow:SetColorTexture(0, 0, 0, 0.28)
 
     local accent = f:CreateTexture(nil, "ARTWORK")
     accent:SetTexture("Interface\\Buttons\\WHITE8X8")
@@ -581,9 +596,9 @@ function DC:ApplyOpacity()
     if self.rows then
         for i, row in ipairs(self.rows) do
             if i % 2 == 0 then
-                row:SetBackdropColor(COLORS.panelAlt[1], COLORS.panelAlt[2], COLORS.panelAlt[3], 0.26 * opacity)
+                row:SetBackdropColor(COLORS.panelAlt[1], COLORS.panelAlt[2], COLORS.panelAlt[3], 0.34)
             else
-                row:SetBackdropColor(0.028, 0.032, 0.042, 0.20 * opacity)
+                row:SetBackdropColor(0.028, 0.032, 0.042, 0.28)
             end
         end
     end
@@ -605,7 +620,7 @@ end
 function DC:ApplyLock()
     if not self.frame or not self.db then return end
     if self.db.locked then
-        self.frame:SetBackdropBorderColor(0.20, 0.19, 0.16, 0.95)
+        self.frame:SetBackdropBorderColor(0.28, 0.25, 0.16, 0.42)
         if self.resizeGrip then self.resizeGrip:Hide() end
     else
         self.frame:SetBackdropBorderColor(unpack(COLORS.border))

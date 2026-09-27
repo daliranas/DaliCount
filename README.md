@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.8.1--beta-f2b333">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.9.0--beta-f2b333">
   <img alt="WoW Forever" src="https://img.shields.io/badge/WoW%20Forever-1.60.1-6b8afd">
   <img alt="Dépendances" src="https://img.shields.io/badge/dependances-aucune-55aa77">
   <img alt="Développeur" src="https://img.shields.io/badge/developpeur-Daliranas-dc7ba8">
@@ -17,7 +17,7 @@
 
 DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` de WoW Forever et ne nécessite aucun framework externe.
 
-Version actuelle : **0.8.1-beta**.
+Version actuelle : **0.9.0-beta**.
 
 ## Aperçu
 

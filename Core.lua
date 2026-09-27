@@ -2,7 +2,7 @@ local ADDON_NAME, DC = ...
 
 _G.DaliCount = DC
 DC.name = ADDON_NAME
-DC.version = "0.8.1-beta"
+DC.version = "0.9.0-beta"
 DC.author = "Daliranas"
 
 DC.metrics = {
@@ -30,8 +30,8 @@ local defaults = {
     locked = false,
     rows = 10,
     autoRows = true,
-    width = 380,
-    opacity = 0.30,
+    width = 340,
+    opacity = 0.16,
     point = "CENTER",
     relativePoint = "CENTER",
     x = 420,
@@ -60,10 +60,11 @@ local function copyDefaults(target, source)
 end
 
 local function sanitizeDatabase(db)
-    if tonumber(db.uiRevision) ~= 4 then
+    if tonumber(db.uiRevision) ~= 5 then
+        db.width = defaults.width
         db.opacity = defaults.opacity
         db.autoRows = true
-        db.uiRevision = 4
+        db.uiRevision = 5
     end
     db.metricIndex = math.floor(clamp(db.metricIndex, 1, #DC.metrics, defaults.metricIndex))
     db.sessionIndex = math.floor(clamp(db.sessionIndex, 1, #DC.sessions, defaults.sessionIndex))
