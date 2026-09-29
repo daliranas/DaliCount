@@ -2,7 +2,7 @@ local ADDON_NAME, DC = ...
 
 _G.DaliCount = DC
 DC.name = ADDON_NAME
-DC.version = "0.9.2-beta"
+DC.version = "0.9.3-beta"
 DC.author = "Daliranas"
 
 DC.metrics = {

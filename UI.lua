@@ -204,8 +204,16 @@ function DC:CreateUI()
         end
     end)
     metricButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-    addTooltip(metricButton, "Type de données", "Clic gauche : favori suivant\nClic droit : choisir et gérer les favoris")
+    addTooltip(metricButton, "Type de données", "Clic : favori suivant\nFlèche : choisir un mode et gérer les favoris")
     self.metricButton = metricButton
+
+    metricButton.text:ClearAllPoints()
+    metricButton.text:SetPoint("LEFT", 3, 0)
+    metricButton.text:SetPoint("RIGHT", -18, 0)
+    local metricArrow = makeButton(metricButton, "v", 17)
+    metricArrow:SetPoint("RIGHT", 0, 0)
+    metricArrow:SetScript("OnClick", function() DC:ToggleMetricMenu() end)
+    addTooltip(metricArrow, "Modes et favoris", "Ouvrir la liste des modes. Cliquez sur + ou * pour gérer les favoris.")
 
     local sessionButton = makeButton(frame, "Combat", 70)
     sessionButton:SetPoint("LEFT", metricButton, "RIGHT", 3, 0)
@@ -399,26 +407,25 @@ function DC:CreateMetricMenu()
 
     local caption = menu:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
     caption:SetPoint("TOPLEFT", 9, -8)
-    caption:SetText("Clic : afficher     Clic droit : favori")
+    caption:SetText("MODE                         FAVORI")
 
     menu.buttons = {}
     for i, metric in ipairs(self.metrics) do
-        local button = makeButton(menu, "", 180)
+        local button = makeButton(menu, "", 149)
         button:SetPoint("TOPLEFT", 8, -23 - (i - 1) * 22)
-        button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
         button.text:ClearAllPoints()
         button.text:SetPoint("LEFT", 6, 0)
         button.text:SetPoint("RIGHT", -6, 0)
         button.text:SetJustifyH("LEFT")
-        button:SetScript("OnClick", function(_, mouseButton)
-            if mouseButton == "RightButton" then
-                DC:ToggleFavoriteMetric(metric.key)
-            else
-                DC:SetMetricByKey(metric.key)
-                menu:Hide()
-            end
+        button:SetScript("OnClick", function()
+            DC:SetMetricByKey(metric.key)
+            menu:Hide()
         end)
-        menu.buttons[i] = button
+        local favoriteButton = makeButton(menu, "+", 28)
+        favoriteButton:SetPoint("LEFT", button, "RIGHT", 3, 0)
+        favoriteButton:SetScript("OnClick", function() DC:ToggleFavoriteMetric(metric.key) end)
+        addTooltip(favoriteButton, "Favori", "Ajouter ou retirer ce mode des favoris.")
+        menu.buttons[i] = { mode = button, favorite = favoriteButton }
     end
     menu:Hide()
 end
@@ -428,9 +435,11 @@ function DC:UpdateMetricMenu()
     for i, metric in ipairs(self.metrics) do
         local favorite = self.db.favoriteMetrics[metric.key]
         local selected = self.db.metricIndex == i
-        local marker = favorite and "* " or "  "
-        self.metricMenu.buttons[i].text:SetText(marker .. metric.label)
-        self.metricMenu.buttons[i].text:SetTextColor(selected and 1 or 0.82, selected and 0.82 or 0.82, selected and 0.34 or 0.80)
+        local row = self.metricMenu.buttons[i]
+        row.mode.text:SetText(metric.label)
+        row.mode.text:SetTextColor(selected and 1 or 0.82, selected and 0.82 or 0.82, selected and 0.34 or 0.80)
+        row.favorite.text:SetText(favorite and "*" or "+")
+        row.favorite.text:SetTextColor(favorite and 1 or 0.62, favorite and 0.75 or 0.62, favorite and 0.20 or 0.62)
     end
 end
 

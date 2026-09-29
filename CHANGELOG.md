@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.3-beta
+
+- Flèche visible dans l'en-tête pour ouvrir les modes directement dans DaliCount.
+- Bouton de favori dédié sur chaque mode ; plus besoin de clic droit ni de commande pour les gérer.
+
 ## 0.9.2-beta
 
 - Modes favoris enregistrés dans les paramètres de l'addon.

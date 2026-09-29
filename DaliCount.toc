@@ -3,7 +3,7 @@
 ## Notes: Compteur de combat élégant et léger pour World of Warcraft: Forever.
 ## Author: Daliranas
 ## X-Developer: Daliranas
-## Version: 0.9.2-beta
+## Version: 0.9.3-beta
 ## SavedVariables: DaliCountDB
 
 Core.lua
