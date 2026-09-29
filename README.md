@@ -145,6 +145,27 @@ Pour afficher les erreurs Lua :
 
 Si la position ou les réglages sont perdus après un redémarrage complet, cela peut provenir du chargement des `SavedVariables` sur certaines versions bêta de WoW Forever.
 
+## Publication automatique sur CurseForge
+
+Le dépôt contient un fichier [`.pkgmeta`](.pkgmeta) compatible avec le packager automatique de CurseForge. Il crée une archive nommée `DaliCount`, exclut les ressources réservées à GitHub et utilise [`CHANGELOG.md`](CHANGELOG.md) comme notes de version.
+
+La connexion du dépôt doit être effectuée une seule fois dans **GitHub → Settings → Webhooks → Add webhook** :
+
+```text
+https://www.curseforge.com/api/projects/PROJECT_ID/package?token=CURSEFORGE_TOKEN
+```
+
+Remplacez `PROJECT_ID` par l'identifiant numérique du projet CurseForge et `CURSEFORGE_TOKEN` par un jeton créé sur la page des API tokens. Le jeton est un secret : il ne doit jamais être ajouté aux fichiers du dépôt.
+
+Ensuite, publiez une version avec un tag Git :
+
+```bash
+git tag v0.9.1-beta
+git push origin v0.9.1-beta
+```
+
+Un tag contenant `beta` produit un fichier bêta sur CurseForge, `alpha` produit un fichier alpha et un tag ne contenant aucun de ces mots produit une version stable.
+
 ## Auteur
 
 Développé par **Daliranas**.

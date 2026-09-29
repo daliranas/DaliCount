@@ -1,0 +1,10 @@
+package-as: DaliCount
+enable-nolib-creation: no
+
+ignore:
+  - assets
+  - README.md
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
