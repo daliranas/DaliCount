@@ -19,6 +19,8 @@ DaliCount affiche les dégâts, les soins et les principales statistiques de com
 
 Version actuelle : **0.9.1-beta**.
 
+> Vous consultez la branche **Retail**, dédiée au client WoW Retail. Cette variante doit être validée en jeu avant une première publication stable.
+
 ## Branches prises en charge
 
 Chaque famille du jeu possède sa propre branche afin que les fichiers TOC, les correctifs et les publications restent indépendants.
