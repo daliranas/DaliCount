@@ -5,19 +5,31 @@
 <h1 align="center">DaliCount</h1>
 
 <p align="center">
-  <strong>Un compteur de combat léger, compact et moderne pour World of Warcraft: Forever.</strong>
+  <strong>Un compteur de combat léger, compact et moderne pour plusieurs versions de World of Warcraft.</strong>
 </p>
 
 <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.9.1--beta-f2b333">
-  <img alt="WoW Forever" src="https://img.shields.io/badge/WoW%20Forever-1.60.1-6b8afd">
+  <img alt="Branches" src="https://img.shields.io/badge/branches-Main%20%7C%20Retail%20%7C%20Forever-6b8afd">
   <img alt="Dépendances" src="https://img.shields.io/badge/dependances-aucune-55aa77">
   <img alt="Développeur" src="https://img.shields.io/badge/developpeur-Daliranas-dc7ba8">
 </p>
 
-DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` de WoW Forever et ne nécessite aucun framework externe.
+DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` et ne nécessite aucun framework externe.
 
 Version actuelle : **0.9.1-beta**.
+
+## Branches prises en charge
+
+Chaque famille du jeu possède sa propre branche afin que les fichiers TOC, les correctifs et les publications restent indépendants.
+
+| Branche | Destination | Rôle |
+|---|---|---|
+| [`main`](https://github.com/daliranas/DaliCount/tree/main) | Base stable | Documentation commune et dernière base validée |
+| [`forever`](https://github.com/daliranas/DaliCount/tree/forever) | WoW Forever | Développement et publications pour Forever |
+| [`retail`](https://github.com/daliranas/DaliCount/tree/retail) | WoW Retail | Développement et publications pour Retail |
+
+Convention des tags : `forever-vX.Y.Z` et `retail-vX.Y.Z`. Les suffixes `-alpha` et `-beta` déterminent automatiquement le type de fichier sur CurseForge.
 
 ## Aperçu
 
@@ -44,10 +56,11 @@ Version actuelle : **0.9.1-beta**.
 
 1. Téléchargez ou clonez ce dépôt.
 2. Fermez World of Warcraft.
-3. Copiez le dossier `DaliCount` dans :
+3. Copiez le dossier `DaliCount` dans le dossier correspondant à votre client :
 
    ```text
-   World of Warcraft/_classic_beta_/Interface/AddOns/
+   World of Warcraft/_classic_beta_/Interface/AddOns/  # Forever
+   World of Warcraft/_retail_/Interface/AddOns/        # Retail
    ```
 
 4. Vérifiez que le fichier suivant existe :
@@ -122,9 +135,9 @@ interrupts, dispels, taken, avoidable, deaths
 
 Le nombre final sélectionne entre 1 et 10 entrées. Le canal **Dire** est protégé par WoW : DaliCount prépare le rapport dans la zone de discussion, puis vous confirmez son envoi avec `Entrée`. Groupe et Raid sont envoyés automatiquement hors combat.
 
-## Compatibilité WoW Forever
+## Compatibilité des clients
 
-WoW Forever expose les données via `C_DamageMeter`. Pendant le combat, certaines informations sont des **secret values** protégées par le client.
+Les adaptations propres à chaque client sont isolées dans les branches `forever` et `retail`. Pendant le combat, certaines informations fournies par `C_DamageMeter` sont des **secret values** protégées par le client.
 
 DaliCount respecte ces restrictions :
 
@@ -160,8 +173,8 @@ Remplacez `PROJECT_ID` par l'identifiant numérique du projet CurseForge et `CUR
 Ensuite, publiez une version avec un tag Git :
 
 ```bash
-git tag v0.9.1-beta
-git push origin v0.9.1-beta
+git tag forever-v0.9.1-beta
+git push origin forever-v0.9.1-beta
 ```
 
 Un tag contenant `beta` produit un fichier bêta sur CurseForge, `alpha` produit un fichier alpha et un tag ne contenant aucun de ces mots produit une version stable.
