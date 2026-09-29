@@ -197,10 +197,14 @@ function DC:CreateUI()
     local metricButton = makeButton(frame, "Dégâts", 100)
     metricButton:SetPoint("TOPLEFT", 78, -3)
     metricButton:SetScript("OnClick", function(_, button)
-        DC:CycleMetric(button == "RightButton" and -1 or 1)
+        if button == "RightButton" then
+            DC:ToggleMetricMenu()
+        else
+            DC:CycleMetric(1)
+        end
     end)
     metricButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-    addTooltip(metricButton, "Type de données", "Clic gauche : suivant\nClic droit : précédent")
+    addTooltip(metricButton, "Type de données", "Clic gauche : favori suivant\nClic droit : choisir et gérer les favoris")
     self.metricButton = metricButton
 
     local sessionButton = makeButton(frame, "Combat", 70)
@@ -373,6 +377,7 @@ function DC:CreateUI()
 
     self:CreateBreakdownUI()
     self:CreateShareMenu()
+    self:CreateMetricMenu()
     self:LayoutRows()
 
     self.refreshTicker = C_Timer.NewTicker(0.25, function()
@@ -380,6 +385,64 @@ function DC:CreateUI()
             DC:Refresh(false)
         end
     end)
+end
+
+function DC:CreateMetricMenu()
+    if self.metricMenu then return end
+    local menu = CreateFrame("Frame", "DaliCountMetricMenu", self.frame, "BackdropTemplate")
+    self.metricMenu = menu
+    menu:SetSize(196, 26 + #self.metrics * 22)
+    menu:SetPoint("TOPLEFT", self.metricButton, "BOTTOMLEFT", 0, -2)
+    menu:SetFrameStrata("DIALOG")
+    menu:SetClampedToScreen(true)
+    makeBackdrop(menu, 0.94)
+
+    local caption = menu:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+    caption:SetPoint("TOPLEFT", 9, -8)
+    caption:SetText("Clic : afficher     Clic droit : favori")
+
+    menu.buttons = {}
+    for i, metric in ipairs(self.metrics) do
+        local button = makeButton(menu, "", 180)
+        button:SetPoint("TOPLEFT", 8, -23 - (i - 1) * 22)
+        button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+        button.text:ClearAllPoints()
+        button.text:SetPoint("LEFT", 6, 0)
+        button.text:SetPoint("RIGHT", -6, 0)
+        button.text:SetJustifyH("LEFT")
+        button:SetScript("OnClick", function(_, mouseButton)
+            if mouseButton == "RightButton" then
+                DC:ToggleFavoriteMetric(metric.key)
+            else
+                DC:SetMetricByKey(metric.key)
+                menu:Hide()
+            end
+        end)
+        menu.buttons[i] = button
+    end
+    menu:Hide()
+end
+
+function DC:UpdateMetricMenu()
+    if not self.metricMenu or not self.db then return end
+    for i, metric in ipairs(self.metrics) do
+        local favorite = self.db.favoriteMetrics[metric.key]
+        local selected = self.db.metricIndex == i
+        local marker = favorite and "* " or "  "
+        self.metricMenu.buttons[i].text:SetText(marker .. metric.label)
+        self.metricMenu.buttons[i].text:SetTextColor(selected and 1 or 0.82, selected and 0.82 or 0.82, selected and 0.34 or 0.80)
+    end
+end
+
+function DC:ToggleMetricMenu()
+    if not self.metricMenu then return end
+    if self.metricMenu:IsShown() then
+        self.metricMenu:Hide()
+    else
+        if self.shareMenu then self.shareMenu:Hide() end
+        self:UpdateMetricMenu()
+        self.metricMenu:Show()
+    end
 end
 
 function DC:LayoutWidth()
@@ -426,6 +489,7 @@ function DC:ToggleShareMenu()
     if self.shareMenu:IsShown() then
         self.shareMenu:Hide()
     else
+        if self.metricMenu then self.metricMenu:Hide() end
         self.shareMenu:Show()
     end
 end

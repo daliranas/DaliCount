@@ -2,7 +2,7 @@ local ADDON_NAME, DC = ...
 
 _G.DaliCount = DC
 DC.name = ADDON_NAME
-DC.version = "0.9.1"
+DC.version = "0.9.2-beta"
 DC.author = "Daliranas"
 
 DC.metrics = {
@@ -38,6 +38,21 @@ local defaults = {
     y = 40,
     scale = 1,
 }
+
+local defaultFavorites = { damage = true, dps = true, healing = true, hps = true }
+
+local function sanitizeFavorites(db)
+    local favorites = {}
+    if type(db.favoriteMetrics) == "table" then
+        for _, metric in ipairs(DC.metrics) do
+            if db.favoriteMetrics[metric.key] == true then favorites[metric.key] = true end
+        end
+    end
+    if not next(favorites) then
+        for key in pairs(defaultFavorites) do favorites[key] = true end
+    end
+    db.favoriteMetrics = favorites
+end
 
 local validPoints = {
     TOP = true, TOPLEFT = true, TOPRIGHT = true,
@@ -79,6 +94,7 @@ local function sanitizeDatabase(db)
     db.shown = db.shown ~= false
     db.locked = db.locked == true
     db.autoRows = db.autoRows ~= false
+    sanitizeFavorites(db)
 end
 
 function DC:Print(msg)
@@ -98,8 +114,42 @@ end
 function DC:CycleMetric(step)
     if not self.db then return end
     local count = #self.metrics
-    self.db.metricIndex = ((self.db.metricIndex - 1 + (step or 1)) % count) + 1
+    local direction = step == -1 and -1 or 1
+    local current = self.db.metricIndex
+    for offset = 1, count do
+        local index = ((current - 1 + direction * offset) % count) + 1
+        if self.db.favoriteMetrics[self.metrics[index].key] then
+            self.db.metricIndex = index
+            break
+        end
+    end
     if self.Refresh then self:Refresh(true) end
+end
+
+function DC:ToggleFavoriteMetric(key)
+    if not self.db then return false end
+    key = string.lower(key or "")
+    local valid = false
+    for _, metric in ipairs(self.metrics) do
+        if metric.key == key then valid = true break end
+    end
+    if not valid then return false end
+    local favorites = self.db.favoriteMetrics
+    if favorites[key] then
+        local count = 0
+        for _, metric in ipairs(self.metrics) do
+            if favorites[metric.key] then count = count + 1 end
+        end
+        if count == 1 then
+            self:Print("Conservez au moins un mode favori.")
+            return true
+        end
+        favorites[key] = nil
+    else
+        favorites[key] = true
+    end
+    if self.UpdateMetricMenu then self:UpdateMetricMenu() end
+    return true
 end
 
 function DC:CycleSession()
@@ -258,6 +308,16 @@ SlashCmdList.DALICOUNT = function(msg)
         elseif not DC:SetMetricByKey(rest) then
             DC:Print("Mode inconnu. damage, dps, healing, hps, absorbs, interrupts, dispels, taken, avoidable, deaths")
         end
+    elseif command == "favorite" or command == "favori" then
+        if not DC:ToggleFavoriteMetric(rest) then
+            DC:Print("Usage : /dc favorite <damage|dps|healing|hps|absorbs|interrupts|dispels|taken|avoidable|deaths>")
+        end
+    elseif command == "favorites" or command == "favoris" then
+        local labels = {}
+        for _, metric in ipairs(DC.metrics) do
+            if DC.db.favoriteMetrics[metric.key] then labels[#labels + 1] = metric.label end
+        end
+        DC:Print("Favoris : " .. table.concat(labels, ", "))
     elseif command == "combat" or command == "current" then
         DC:SetSessionByKey("current")
     elseif command == "session" or command == "overall" then
@@ -317,6 +377,7 @@ SlashCmdList.DALICOUNT = function(msg)
     elseif command == "help" then
         DC:Print("/dc - afficher/masquer")
         DC:Print("/dc mode <damage|dps|healing|hps|absorbs|interrupts|dispels|taken|avoidable|deaths>")
+        DC:Print("/dc favorite <mode> : ajouter/retirer un favori | /dc favorites : liste")
         DC:Print("/dc combat | /dc session | /dc reset | /dc lock | /dc unlock")
         DC:Print("/dc rows 1-15 | /dc auto on|off | /dc scale 75-150")
         DC:Print("/dc opacity 10-100 | /dc position | /dc version")

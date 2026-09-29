@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.9.1-f2b333">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.9.2--beta-f2b333">
   <img alt="Branches" src="https://img.shields.io/badge/branches-Main%20%7C%20Retail%20%7C%20Forever-6b8afd">
   <img alt="Dépendances" src="https://img.shields.io/badge/dependances-aucune-55aa77">
   <img alt="Développeur" src="https://img.shields.io/badge/developpeur-Daliranas-dc7ba8">
@@ -17,7 +17,7 @@
 
 DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` et ne nécessite aucun framework externe.
 
-Version actuelle : **0.9.1**.
+Version actuelle : **0.9.2-beta**.
 
 > Vous consultez la branche **Forever**, dédiée au client WoW Forever.
 
@@ -53,6 +53,7 @@ Convention des tags : `forever-vX.Y.Z` et `retail-vX.Y.Z`. Les suffixes `-alpha`
 - Fenêtre déplaçable et verrouillable.
 - Partage du classement vers Groupe, Dire ou Raid.
 - Aucune dépendance : ni Ace3, ni LibStub.
+- Modes favoris configurables pour passer rapidement d'une statistique à l'autre.
 
 ## Installation
 
@@ -79,8 +80,10 @@ Utilisez `/dc` pour afficher ou masquer la fenêtre.
 
 | Action | Résultat |
 |---|---|
-| Clic gauche sur la statistique | Mode suivant |
-| Clic droit sur la statistique | Mode précédent |
+| Clic gauche sur la statistique | Favori suivant |
+| Clic droit sur la statistique | Ouvre le menu des modes |
+| Clic gauche sur un mode dans le menu | Affiche ce mode, même s'il n'est pas favori |
+| Clic droit sur un mode dans le menu | Ajoute ou retire ce mode des favoris (`*`) |
 | Clic sur `Combat` ou `Session` | Change la période affichée |
 | Clic sur une ligne | Ouvre le détail par sort hors combat |
 | Bouton `P` | Ouvre le menu de partage |
@@ -117,8 +120,10 @@ Utilisez `/dc` pour afficher ou masquer la fenêtre.
 | `/dc combat` | Afficher le combat actuel |
 | `/dc session` | Afficher la session globale |
 | `/dc reset` | Effacer les sessions de combat |
-| `/dc mode` | Passer au mode suivant |
+| `/dc mode` | Passer au favori suivant |
 | `/dc mode <nom>` | Sélectionner directement un mode |
+| `/dc favorite <nom>` | Ajouter ou retirer un mode des favoris |
+| `/dc favorites` | Afficher la liste des favoris |
 
 Modes disponibles :
 
@@ -175,8 +180,8 @@ Remplacez `PROJECT_ID` par l'identifiant numérique du projet CurseForge et `CUR
 Ensuite, publiez une version avec un tag Git :
 
 ```bash
-git tag forever-v0.9.1
-git push origin forever-v0.9.1
+git tag forever-v0.9.2-beta
+git push origin forever-v0.9.2-beta
 ```
 
 Un tag contenant `beta` produit un fichier bêta sur CurseForge, `alpha` produit un fichier alpha et un tag ne contenant aucun de ces mots produit une version stable.

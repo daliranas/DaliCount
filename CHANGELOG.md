@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.2-beta
+
+- Modes favoris enregistrés dans les paramètres de l'addon.
+- Clic gauche sur la statistique pour parcourir uniquement les favoris.
+- Clic droit pour afficher tous les modes et gérer les favoris.
+- Commandes `/dc favorite <mode>` et `/dc favorites`.
+
 ## 0.9.1
 
 - Nouvelle interface compacte inspirée des damage meters modernes.
