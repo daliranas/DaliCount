@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.1-beta
+## 0.9.1
 
 - Nouvelle interface compacte inspirée des damage meters modernes.
 - Nom DaliCount restauré dans l'en-tête.

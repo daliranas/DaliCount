@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.9.1--beta-f2b333">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.9.1-f2b333">
   <img alt="Branches" src="https://img.shields.io/badge/branches-Main%20%7C%20Retail%20%7C%20Forever-6b8afd">
   <img alt="Dépendances" src="https://img.shields.io/badge/dependances-aucune-55aa77">
   <img alt="Développeur" src="https://img.shields.io/badge/developpeur-Daliranas-dc7ba8">
@@ -17,7 +17,7 @@
 
 DaliCount affiche les dégâts, les soins et les principales statistiques de combat dans une interface redimensionnable et semi-transparente. Il s'appuie exclusivement sur l'API native `C_DamageMeter` et ne nécessite aucun framework externe.
 
-Version actuelle : **0.9.1-beta**.
+Version actuelle : **0.9.1**.
 
 > Vous consultez la branche **Forever**, dédiée au client WoW Forever.
 
@@ -175,8 +175,8 @@ Remplacez `PROJECT_ID` par l'identifiant numérique du projet CurseForge et `CUR
 Ensuite, publiez une version avec un tag Git :
 
 ```bash
-git tag forever-v0.9.1-beta
-git push origin forever-v0.9.1-beta
+git tag forever-v0.9.1
+git push origin forever-v0.9.1
 ```
 
 Un tag contenant `beta` produit un fichier bêta sur CurseForge, `alpha` produit un fichier alpha et un tag ne contenant aucun de ces mots produit une version stable.
